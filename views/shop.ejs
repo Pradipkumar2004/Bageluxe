@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Now - Iconica</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="hidden lg:block lg:w-full sticky top-0 z-50">
+        <%- include('./partials/header') %>
+    </div>
+    
+    
+       
+    <!-- Success & Error Messages -->
+    <% if(success.length > 0) { %>
+        <div id="successMessage" class="fixed top-5 left-1/2 transform -translate-x-1/2 p-4 rounded-md bg-green-500 text-white text-center shadow-lg z-50">
+            <%= success %>
+        </div>
+    <% } %>
+    <% if(error.length > 0) { %>
+        <div id="errorMessage" class="fixed top-5 left-1/2 transform -translate-x-1/2 p-4 rounded-md bg-red-500 text-white text-center shadow-lg z-50">
+            <%= error %>
+        </div>
+    <% } %>
+   
+    <!-- Mobile Sidebars -->
+    <div class="lg:hidden fixed inset-y-0 left-0 z-40 w-64 bg-white shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out" id="leftSidebar">
+        <div class="p-6">
+            <button id="closeLeftSidebar" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800">
+                <i class="ri-close-line text-2xl"></i>
+            </button>
+            <h3 class="font-semibold text-lg mb-4">Sort & Filter</h3>
+            <!-- Sort By -->
+<div class="mb-6">
+    <h4 class="font-medium mb-2">Sort by</h4>
+    <form id="sortForm" action="/shop" method="GET">
+        <!-- Preserve other query params -->
+        <input type="hidden" name="category" value="<%= category || '' %>">
+
+        <select class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            name="sortby" onchange="document.getElementById('sortForm').submit()">
+            <option value="popular" <%= sortby === 'popular' ? 'selected' : '' %>>Popular</option>
+            <option value="newest" <%= sortby === 'newest' ? 'selected' : '' %>>Newest</option>
+            <option value="price-low-high" <%= sortby === 'price-low-high' ? 'selected' : '' %>>Price: Low to High</option>
+            <option value="price-high-low" <%= sortby === 'price-high-low' ? 'selected' : '' %>>Price: High to Low</option>
+        </select>
+    </form>
+</div>
+
+            <!-- Categories -->
+<div class="mb-6">
+    <h4 class="font-medium mb-2">Categories</h4>
+    <ul class="space-y-2">
+        <li>
+            <a class="text-gray-600 hover:text-blue-500 transition-colors <%= category === 'new' ? 'font-bold text-blue-500' : '' %>"
+                href="/shop?category=new">New Collection</a>
+        </li>
+        <li>
+            <a class="text-gray-600 hover:text-blue-500 transition-colors <%= category === 'all' ? 'font-bold text-blue-500' : '' %>"
+                href="/shop?category=all">All Products</a>
+        </li>
+        <li>
+            <a class="text-gray-600 hover:text-blue-500 transition-colors <%= category === 'discounted' ? 'font-bold text-blue-500' : '' %>"
+                href="/shop?category=discounted">Discounted Products</a>
+        </li>
+    </ul>
+</div>
+
+            <!-- Filters -->
+            <div>
+                <h4 class="font-medium mb-2">Filter by</h4>
+                <ul class="space-y-2">
+                    <li><a class="text-gray-600 hover:text-blue-500 transition-colors" href="">Availability</a></li>
+                    <li><a class="text-gray-600 hover:text-blue-500 transition-colors" href="">Discount</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="lg:hidden fixed inset-y-0 right-0 z-40 w-64 bg-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out" id="rightSidebar">
+        <div class="p-6">
+            <button id="closeRightSidebar" class="absolute top-4 left-4 text-gray-500 hover:text-gray-800">
+                <i class="ri-close-line text-2xl"></i>
+            </button>
+            <%- include('./partials/headerRes') %>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex justify-between items-center mb-6 lg:hidden">
+            <button id="openLeftSidebar" class="text-gray-500 hover:text-gray-800">
+                <i class="ri-filter-3-line text-2xl"></i>
+            </button>
+            <h1 class="text-2xl font-bold">Our Collection</h1>
+            <button id="openRightSidebar" class="text-gray-500 hover:text-gray-800">
+                <i class="ri-menu-line text-2xl"></i>
+            </button>
+        </div>
+
+        <div class="hidden lg:block mb-8">
+            <h1 class="text-3xl font-bold text-center">Our Collection</h1>
+        </div>
+       
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Desktop Sidebar -->
+                 <div class="hidden lg:block lg:w-1/4">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                   <!-- Sort By -->
+                <div class="mb-6">
+             <h4 class="font-medium mb-2">Sort by</h4>
+             <form id="sortFormDesktop" action="/shop" method="GET">
+            <!-- Preserve other query params -->
+            <input type="hidden" name="category" value="<%= category || '' %>" />
+
+            <select class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            name="sortby" onchange="document.getElementById('sortFormDesktop').submit()">
+            <option value="popular" <%= sortby === 'popular' ? 'selected' : '' %>>Popular</option>
+            <option value="newest" <%= sortby === 'newest' ? 'selected' : '' %>>Newest</option>
+            <option value="price-low-high" <%= sortby === 'price-low-high' ? 'selected' : '' %>>Price: Low to High</option>
+            <option value="price-high-low" <%= sortby === 'price-high-low' ? 'selected' : '' %>>Price: High to Low</option>
+        </select>
+    </form>
+                   </div>
+                    <!-- Categories -->
+                    <div class="mb-6">
+    <h4 class="font-medium mb-2">Categories</h4>
+    <ul class="space-y-2">
+        <li>
+            <a class="text-gray-600 hover:text-blue-500 transition-colors <%= category === 'new' ? 'font-bold text-blue-500' : '' %>"
+                href="/shop?category=new">New Collection</a>
+        </li>
+        <li>
+            <a class="text-gray-600 hover:text-blue-500 transition-colors <%= category === 'all' ? 'font-bold text-blue-500' : '' %>"
+                href="/shop?category=all">All Products</a>
+        </li>
+        <li>
+            <a class="text-gray-600 hover:text-blue-500 transition-colors <%= category === 'discounted' ? 'font-bold text-blue-500' : '' %>"
+                href="/shop?category=discounted">Discounted Products</a>
+        </li>
+    </ul>
+                    </div>
+                    <!-- Filters -->
+                    <div>
+                        <h3 class="font-semibold text-lg mb-3">Filter by</h3>
+                        <ul class="space-y-2">
+                            <li><a class="text-gray-600 hover:text-blue-500 transition-colors" href="">Availability</a></li>
+                            <li><a class="text-gray-600 hover:text-blue-500 transition-colors" href="">Discount</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="lg:w-3/4">
+                <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+                    <% products.forEach((product) => { %>
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105 relative">
+                            <% if (product.discount) { %>
+                                <div class="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                                    <%= product.discount %>% OFF
+                                </div>
+                            <% } %>
+                            <div class="h-40 sm:h-48 flex items-center justify-center" style="background-color:<%= product.bgcolor %>">
+                                <img class="h-32 sm:h-40 object-contain" src="data:image/jpeg;base64,<%= product.image.toString('base64') %>" alt="<%= product.name %>">
+                            </div>
+                            <div class="p-3 sm:p-4" style="background-color: <%= product.panelcolor %>; color:<%= product.textcolor %>">
+                                <h3 class="text-sm sm:text-base font-semibold mb-1 truncate"><%= product.name %></h3>
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-lg font-bold">₹<%= product.price %></span>
+                                    <a href="/addtocart/<%= product._id %>" 
+                                        class="bg-[<%= product.bgcolor %>] text-[<%= product.panelcolor %>] p-2 rounded-full hover:bg-pearl-600 transition-colors flex items-center justify-center w-10 h-10">
+                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                             <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1 5h13m-4 0a1 1 0 1 1-2 0m4 0a1 1 0 1 1-2 0" 
+                                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                         </svg>
+                                     </a>
+                                     
+                                </div>
+                                <a href="/product/<%= product._id %>" class="block text-center hover:underline text-sm color: <%= product.textcolor %>;">View Details</a>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('./partials/footer') %>
+
+    <script>
+
+
+
+        // Auto-hide success and error messages after 5 seconds
+        setTimeout(() => {
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            if (successMessage) successMessage.style.display = 'none';
+            if (errorMessage) errorMessage.style.display = 'none';
+        }, 3000);
+
+        // Mobile sidebar functionality
+        document.getElementById('openLeftSidebar').addEventListener('click', () => {
+            document.getElementById('leftSidebar').classList.remove('-translate-x-full');
+        });
+
+        document.getElementById('closeLeftSidebar').addEventListener('click', () => {
+            document.getElementById('leftSidebar').classList.add('-translate-x-full');
+        });
+
+        document.getElementById('openRightSidebar').addEventListener('click', () => {
+            document.getElementById('rightSidebar').classList.remove('translate-x-full');
+        });
+
+        document.getElementById('closeRightSidebar').addEventListener('click', () => {
+            document.getElementById('rightSidebar').classList.add('translate-x-full');
+        });
+    </script>
+</body>
+</html>
+
